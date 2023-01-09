@@ -1,9 +1,7 @@
 import './App.css';
-import React, { useEffect } from 'react';
+import React from 'react';
 import axios from 'axios';
-import { Chart } from 'react-charts'
 import { Bar } from 'react-chartjs-2';
-import { Chart as ChartJS } from 'chart.js/auto'
 
 export const options = {
   responsive: true,
@@ -33,87 +31,26 @@ export const data = {
 };
 
 function App() {
-  const imageRef = React.useRef();
   const [datas, setDatas] = React.useState([])
-  const [dataSet, setDataset] = React.useState([])
-
-  const data = React.useMemo(
-    () => [
-      {
-        label: 'Series 1',
-        data: [[0, 1], [1, 2], [2, 4], [3, 2], [4, 7]]
-      },
-      {
-        label: 'Series 2',
-        data: [[0, 3], [1, 1], [2, 5], [3, 6], [4, 4]]
-      }
-    ],
-    []
-  )
-
-  const axes = React.useMemo(
-    () => [
-      { primary: true, type: 'linear', position: 'bottom' },
-      { type: 'linear', position: 'left' }
-    ],
-    []
-  )
 
   const getGraph = () => {
     axios.get('http://localhost:3001/get')
       .then(result => {
-        // console.log(result.data.graph?.map(set => console.log({
-        //   labels: set.accounts,
-        //   datasets: ''
-        // })))
-        // setDataSet()
         setDatas(result.data.graph)
         console.log(result.data.graph)
-        //   setDatas(result.data.graph.filter(x => x.dailyGain).map(x => {
-        //   const graph = JSON.parse(x.dailyGain)?.map((y, index) => [index, y[0].profit])
-        //   return (
-        //     {
-        //       label: x.accounts,
-        //       data: graph
-        //     }
-        //   )
-        // }
-        // ))
       })
   }
   const test2 = () => {
     axios.get('http://localhost:3001/test2')
       .then(result => console.log(result.data))
   }
-  useEffect(() => {
-    // axios.get('http://localhost:3001/test')
-    //   .then(blob => {
-    //     console.log(blob.data)
-    //   })
 
-    //test
-    // const email = 'omesbooks@hotmail.com'
-    // const password = 'meta5656'
-    // axios.get(`https://www.myfxbook.com/api/login.json?email=${email}&password=${password}`)
-    //   .then(result => {
-    //     console.log(result.data)
-    //     const session = result.data.session
-    //     axios.get(`https://www.myfxbook.com/api/logout.json?session=${session}`)
-    //       .then(result => {
-    //         if (!result.data.error) {
-    //           console.log('logouted')
-    //         } else {
-    //           console.log('logout fail')
-    //         }
-    //       })
-    //   })
-  }, [])
   return (
     <div className="">
       <header className="">
         <button onClick={() => getGraph()}>Gen</button>
-        <button onClick={() => console.log(datas)}>check</button>
-        <button onClick={() => test2()}>check</button>
+        <button onClick={() => console.log(datas)}>datas check</button>
+        <button onClick={() => test2()}>test2</button>
 
         {datas?.map(data => (
           <>
@@ -126,7 +63,6 @@ function App() {
             >
               {datas?.length > 0 &&
                 <>
-                  <button onClick={() => console.log(JSON.parse(data.dailyGain)?.map((y) => y[0].profit))}>check</button>
                   <Bar data={{
                     labels: JSON.parse(data.dailyGain)?.map((y) => (y[0].date)),
                     datasets:
@@ -153,7 +89,6 @@ function App() {
                         }
                       ]
                   }} />
-                  {/* <Chart data={[data]} axes={axes} /> */}
                 </>
               }
             </div>
